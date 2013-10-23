@@ -81,14 +81,12 @@ bool MapScene::init()
     // 3. add catmull rom spline for road
     
     CCPointArray *array = CCPointArray::create(20);
-    
-    array->addControlPoint(ccp(0, 0));
-    array->addControlPoint(ccp(80, 80));
-    array->addControlPoint(ccp(size.width - 80, 80));
-    array->addControlPoint(ccp(size.width - 80, size.height - 80));
-    array->addControlPoint(ccp(80, size.height - 80));
-    array->addControlPoint(ccp(80, 80));
-    array->addControlPoint(ccp(size.width / 2, size.height / 2));
+  
+    array->addControlPoint(ccp(518, 0));
+    array->addControlPoint(ccp(512, 573));
+    array->addControlPoint(ccp(609, 476+size.height));
+    array->addControlPoint(ccp(763, 561+size.height));
+    array->addControlPoint(ccp(894, 683+size.height));
     
     // create the catmull rom action
     CCCatmullRomBy *action = CCCatmullRomBy::create(3, array);
@@ -123,12 +121,6 @@ bool MapScene::init()
     CCSprite* pSprite = CCSprite::create("sattellite_lofall.png");
     pSprite->setTag(kTagMapImage);
     pSprite->setAnchorPoint(ccp(0,0));
-    
-    // position the sprite on the center of the screen
-    //pSprite->setPosition( ccp(size.width/2, size.height/2) );
-    
-    // add the sprite as a child to this layer
-    //this->addChild(pSprite, 0, kTagMapLayer);
     
     ///////
     // Paralax map test
@@ -191,7 +183,14 @@ void MapScene::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		}
 	}
     
+    // debug
+    CCTouch* pTouch1 = (CCTouch*)pTouches->anyObject();
+    CCPoint point1Location = pTouch1->getLocation();
+    
+    CCLog("");
     CCLog("BEGIN TOUCH STATE = %d", touchState);
+    CCLog("touchLoc: (x:%f, y:%f)", point1Location.x, point1Location.y);
+    CCLog("");
 }
 
 void MapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
@@ -335,81 +334,6 @@ void MapScene::handlePinch(CCSet *pTouches, CCEvent *pEvent)
     {
         CCLOG("*** mapImage or carImage IS NULL ****");
     }
-    
-    
-    // legacy "working" code
-//    // real distance
-//    float distance = ccpAngle(point1Location, point2Location);
-//    
-//    if(pinchStarted)
-//    {
-//        pinchDiameter = distance;
-//    }
-//    
-//    // get the delta between the real distance and the starting distance
-//    float distanceDiff = pinchDiameter - distance;
-//    
-//    CCNode* node = getChildByTag(kTagMapLayer);
-//    CCNode* mapImage = node->getChildByTag(kTagMapImage);
-//    if (mapImage != NULL)
-//    {
-//        float currentScale = mapImage->getScale();
-//        float newScale = currentScale;
-//        if (!pinchStarted)
-//        {
-//            newScale = currentScale + distanceDiff;
-//            if (newScale < 1)
-//            {
-//                newScale = 1;
-//            }
-//            else if (newScale > 4)
-//            {
-//                newScale = 4;
-//            }
-//        }
-//        else
-//        {
-//            pinchStarted = false;
-//        }
-//        
-//        if (newScale != newScale)
-//        {
-//            // scale value is NaN
-//            CCLOG("*** SCALE IS NaN ****");
-//        }
-//        else
-//        {
-//            // change the scale value
-//            mapImage->setScale(newScale);
-//            
-//            // now reset the position based on the new scale
-//            CCPoint mapPosition = node->getPosition();
-//            CCSize  contentSize = mapImage->getContentSize();
-//            // adjust for scale
-//            contentSize.height = contentSize.height * node->getChildByTag(kTagMapImage)->getScale();
-//            contentSize.width = contentSize.width * node->getChildByTag(kTagMapImage)->getScale();
-//            
-//            CCPoint cleanZoom = resetBoundries(mapPosition, contentSize);
-//            node->setPosition(cleanZoom);
-//            
-//            CCLOG("");
-//            //            CCLOG("*** SCALE VALUES ****");
-//            //            CCLog("currScale: %f", currentScale);
-//            //            CCLog("delta1: (x:%f y:%f)", point1Location.x, point1Location.y);
-//            //            CCLog("delta2: (x:%f y:%f)", point2Location.x, point2Location.y);
-//            //            CCLog("distace: %f", distance);
-//            //            CCLog("newscale:  %f", newScale);
-//            //
-//            //            CCLog("content size: (width:%f, height:%f)", contentSize.width, contentSize.height);
-//            //            CCLog("currPos: (x:%f, y:%f)", mapPosition.x, mapPosition.y);
-//            //            CCLog("newPos:  (x:%f, y:%f)", cleanZoom.x, cleanZoom.y);
-//            //            CCLOG("*** SCALE VALUES END ****");
-//        }
-//    }
-//    else
-//    {
-//        CCLOG("*** SCALE IS NULL ****");
-//    }
 }
 
 float MapScene::calculateScale(float currentScale, float scaleDiff)

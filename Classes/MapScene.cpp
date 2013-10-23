@@ -81,14 +81,12 @@ bool MapScene::init()
     // 3. add catmull rom spline for road
     
     CCPointArray *array = CCPointArray::create(20);
-    
-    array->addControlPoint(ccp(0, 0));
-    array->addControlPoint(ccp(80, 80));
-    array->addControlPoint(ccp(size.width - 80, 80));
-    array->addControlPoint(ccp(size.width - 80, size.height - 80));
-    array->addControlPoint(ccp(80, size.height - 80));
-    array->addControlPoint(ccp(80, 80));
-    array->addControlPoint(ccp(size.width / 2, size.height / 2));
+  
+    array->addControlPoint(ccp(518, 0));
+    array->addControlPoint(ccp(512, 573));
+    array->addControlPoint(ccp(609, 476+size.height));
+    array->addControlPoint(ccp(763, 561+size.height));
+    array->addControlPoint(ccp(894, 683+size.height));
     
     // create the catmull rom action
     CCCatmullRomBy *action = CCCatmullRomBy::create(3, array);
@@ -123,12 +121,6 @@ bool MapScene::init()
     CCSprite* pSprite = CCSprite::create("sattellite_lofall.png");
     pSprite->setTag(kTagMapImage);
     pSprite->setAnchorPoint(ccp(0,0));
-    
-    // position the sprite on the center of the screen
-    //pSprite->setPosition( ccp(size.width/2, size.height/2) );
-    
-    // add the sprite as a child to this layer
-    //this->addChild(pSprite, 0, kTagMapLayer);
     
     ///////
     // Paralax map test
@@ -191,7 +183,14 @@ void MapScene::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		}
 	}
     
+    // debug
+    CCTouch* pTouch1 = (CCTouch*)pTouches->anyObject();
+    CCPoint point1Location = pTouch1->getLocation();
+    
+    CCLog("");
     CCLog("BEGIN TOUCH STATE = %d", touchState);
+    CCLog("touchLoc: (x:%f, y:%f)", point1Location.x, point1Location.y);
+    CCLog("");
 }
 
 void MapScene::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
